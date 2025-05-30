@@ -49,7 +49,7 @@ export interface CoreUserRegistration {
 }
 
 export interface ClientRegistration {
-  companyName: string;
+  company_name: any;
   username: string;
   password: string;
   confirmPassword: string;
