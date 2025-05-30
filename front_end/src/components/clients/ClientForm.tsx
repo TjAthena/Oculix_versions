@@ -17,7 +17,7 @@ const ClientForm = ({ onSubmit, onCancel }: ClientFormProps) => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<ClientRegistration>({
-    companyName: "",
+    company_name: "",
     username: "",
     password: "",
     confirmPassword: ""
@@ -46,7 +46,7 @@ const ClientForm = ({ onSubmit, onCancel }: ClientFormProps) => {
       if (success) {
         toast({
           title: "Success",
-          description: `${formData.companyName} has been successfully added.`
+          description: `${formData.company_name} has been successfully added.`
         });
         onSubmit(true);
       } else {
@@ -73,12 +73,12 @@ const ClientForm = ({ onSubmit, onCancel }: ClientFormProps) => {
     <form onSubmit={handleSubmit}>
       <div className="space-y-4 py-4">
         <div className="space-y-2">
-          <Label htmlFor="companyName">Company Name</Label>
+          <Label htmlFor="company_name">Company Name</Label>
           <Input
-            id="companyName"
-            name="companyName"
+            id="company_name"
+            name="company_name"
             placeholder="Enter company name"
-            value={formData.companyName}
+            value={formData.company_name}
             onChange={handleChange}
             required
           />

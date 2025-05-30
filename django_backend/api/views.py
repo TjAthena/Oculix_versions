@@ -65,14 +65,19 @@ class ClientViewSet(viewsets.ModelViewSet):
 
         # Create the client
         client = serializer.save(created_by=self.request.user)
+        client.save()
 
         # Create a new user for the client
-        User.objects.create_user(
-            username=serializer.validated_data['username'],
-            password=hashed_password,
-            role='client',
-            client_profile_id=client.id,
-        )
+        try:
+            User.objects.create_user(
+                username=serializer.validated_data['username'],
+                password=hashed_password,
+                role='client',
+                client_profile_id=client.id,
+            )
+        except Exception as e:
+            print(f"Error creating user: {e}")
+            return Response({"message": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
     @action(detail=True, methods=['get'])
     def report_count(self, request, pk=None):

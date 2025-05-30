@@ -203,7 +203,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return false;
       }
 
-      const { companyName, username, password } = clientData;
+      const { company_name, username, password } = clientData;
       const API_URL = import.meta.env.REACT_APP_API_URL || 'http://localhost:8000';
 
       try {
@@ -213,23 +213,46 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.getItem('authToken')}`
           },
-          body: JSON.stringify({ companyName, username, password }),
+          body: JSON.stringify({company_name, username, password }),
         });
 
-        const data = await response.json();
-
         if (!response.ok) {
-          toast({
-            title: "Failed to create client",
-            description: data.message || "Failed to create client",
-            variant: "destructive",
-          });
+          const contentType = response.headers.get("content-type");
+          console.log("Content-Type:", contentType);
+          if (contentType && contentType.includes("application/json")) {
+            try {
+              const data = await response.json();
+              console.log("data:", data);
+              toast({
+                title: "Failed to create client",
+                description: data.message || "Failed to create client",
+                variant: "destructive",
+              });
+              console.log("Error data:", data);
+            } catch (error) {
+              console.error("Error parsing JSON:", error);
+              toast({
+                title: "Failed to create client",
+                description: "Failed to create client. An unexpected error occurred.",
+                variant: "destructive",
+              });
+            }
+          } else {
+            toast({
+              title: "Failed to create client",
+              description: "Failed to create client. An unexpected error occurred.",
+              variant: "destructive",
+            });
+          }
           return false;
         }
 
+        const data = await response.json();
+        console.log("Success data:", data);
+
         toast({
           title: "Client created",
-          description: `${clientData.companyName} has been successfully registered`,
+          description: `${clientData.company_name} has been successfully registered`,
         });
 
         return true;
