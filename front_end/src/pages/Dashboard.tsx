@@ -29,7 +29,7 @@ const DashboardCard = ({ title, value, icon }: { title: string, value: string, i
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState<any[]>([]);
-  const [userCounts, setUserCounts] = useState<{ total_users: number; core_users: number; client_users: number; } | null>(null);
+  const [userCounts, setUserCounts] = useState<{ total_users: number; core_users: number; client_users: number; }>({ total_users: 0, core_users: 0, client_users: 0 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

@@ -5,8 +5,9 @@ from .models import Client, Report
 from .serializers import ClientSerializer, ReportSerializer
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
+from authentication.models import User as AuthenticationUser
+from api.models import Client as ApiClient
 
-User = get_user_model()
 
 class IsOwnerOrAdmin(permissions.BasePermission):
     """
@@ -27,9 +28,9 @@ class UserCountViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
 
     def list(self, request):
-        total_users = User.objects.count()
-        core_users = User.objects.filter(role='core_user').count()
-        client_users = User.objects.filter(role='client').count()
+        total_users = AuthenticationUser.objects.count() + ApiClient.objects.count()
+        core_users = AuthenticationUser.objects.filter(role='core_user').count()
+        client_users = ApiClient.objects.count()
 
         return Response({
             'total_users': total_users,
